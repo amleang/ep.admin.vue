@@ -19,6 +19,8 @@ Vue.use(VueTouchRipple, {
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
+import admin  from'@/components/base/admin';
+Vue.component('base-admin', admin)
 
 /* eslint-disable no-new */
 new Vue({
