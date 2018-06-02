@@ -1,5 +1,5 @@
 <template>
-    <el-card class="box-card" :style="`min-width:700px;margin-bottom:20px;${isSpread&&!isOpen?'height:130px;':''}`">
+    <el-card class="box-card" :style="`min-width:700px;margin-bottom:20px;${isSpread&&!isOpen?'height:140px;':''}`">
         <div slot="header" class="clearfix">
             <span>查询</span>
             <div style="float: right;">
@@ -10,7 +10,7 @@
             </div>
         </div>
         <div>
-            <el-row :gutter="20" style="padding-bottom:10px;">
+            <el-row :gutter="20" style="padding-bottom:20px;">
                 <el-col :span="2">
                     <div class="search-title">名称</div>
                 </el-col>
@@ -18,8 +18,22 @@
                     <el-input style="display:inline-block;" size="small" placeholder="请输入内容">
                     </el-input>
                 </el-col>
+                <el-col :span="2">
+                    <div class="search-title">状态</div>
+                </el-col>
+                <el-col :span="6">
+                    <el-input style="display:inline-block;" size="small" placeholder="请输入内容">
+                    </el-input>
+                </el-col>
+                <el-col :span="2">
+                    <div class="search-title">状态2</div>
+                </el-col>
+                <el-col :span="6">
+                    <el-input style="display:inline-block;" size="small" placeholder="请输入内容">
+                    </el-input>
+                </el-col>
             </el-row>
-             <el-row :gutter="20">
+            <el-row :gutter="20">
                 <el-col :span="2">
                     <div class="search-title">名称</div>
                 </el-col>
