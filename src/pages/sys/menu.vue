@@ -1,24 +1,37 @@
 <template>
     <base-admin>
-        <div class="daohang">
-            <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-                <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-                <el-breadcrumb-item>活动详情</el-breadcrumb-item>
-            </el-breadcrumb>
-        </div>
+        <base-search :isSpread="true" @spreadHandle="spreadHandle"></base-search>
+        <base-table tableName="菜单管理" :columns="table.columns" :tableData="table.data">
+            <!-- <div slot="button">zhagsan</div> -->
+        </base-table>
     </base-admin>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      table: {
+        columns: [
+          { prop: "name1", label: "名称", width: 180 },
+          { prop: "name2", label: "名称2", width: 180 },
+          { prop: "name3", label: "备注" }
+        ],
+        data:[
+            {name1:'战三',name2:'dfadf',name3:'中的那等你of都是你发撒'},
+            {name1:'战三',name2:'dfadf',name3:'中的那等你of都是你发撒'},
+            {name1:'战三',name2:'dfadf',name3:'中的那等你of都是你发撒'},
+            {name1:'战三',name2:'dfadf',name3:'中的那等你of都是你发撒'}
+        ]
+      }
+    };
+  },
+  methods: {
+    spreadHandle(isOpen) {
+      console.log("isOpen=>", isOpen);
+    }
+  }
+};
 </script>
 
-<style scoped>
-.daohang{
-    height:50px;
-   display: flex;
-   align-items: center;
-}
-</style>
+

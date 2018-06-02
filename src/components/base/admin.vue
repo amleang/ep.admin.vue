@@ -70,68 +70,7 @@ export default {
 </script>
 
 
-
-<style  lang="scss" scoped>
-.main {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  .nav-let {
-    width: 240px;
-    bottom: 0;
-    top: 0;
-    position: fixed;
-    .nav-top {
-      height: 61px;
-      line-height: 60px;
-      background-color: #545c64;
-      color: #fff;
-      text-align: center;
-      font-size: 18px;
-      border-right: solid 1px #e6e6e6;
-      .line {
-        background-image: linear-gradient(
-          to right,
-          transparent,
-          yellow,
-          transparent
-        );
-        height: 1px;
-        overflow: hidden;
-      }
-    }
-  }
-  .content {
-    width: 100%;
-    height: 100%;
-    background-color: #f3f3f3;
-    .sub-main {
-      margin-left: 240px;
-      .nav-top {
-        padding: 0 15px;
-        height: 60px;
-        line-height: 60px;
-        background-color: #545c64;
-        .change-menu {
-          padding-top: 7px;
-          .el-icon-menu {
-            cursor: pointer;
-            display: initial;
-            font-size: 30px;
-            color: #fff;
-          }
-        }
-      }
-    }
-    .con {
-      position: absolute;
-      top: 60px;
-      bottom: 0;
-      right: 0;
-      padding: 0 20px;
-    }
-  }
-}
+<style lang="scss" >
+@import "../css/base.scss";
 </style>
+
