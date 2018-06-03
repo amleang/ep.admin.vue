@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/pages/login'
 import home from '@/pages/home'
+import user from "@/pages/sys/user"
 import menu from '@/pages/sys/menu'
 Vue.use(Router)
 
@@ -11,19 +12,19 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: home
+      component: home,
+      children: [
+        {
+          path: '/sys/user', component: user
+        },
+        {
+          path: '/sys/menu', component: menu
+        }
+      ]
     }, {
       path: '/login',
       name: 'Login',
       component: Login
-    }, {
-      path: "/sys",
-      component: menu,
-      children: [
-        {
-          path: 'menu', component: menu
-        }
-      ]
     }
   ]
 })

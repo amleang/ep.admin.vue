@@ -48,6 +48,35 @@
               font-size: 30px;
               color: #fff;
             }
+            .tool{
+              float:right;
+              margin-top:-7px;
+              color:#fff;
+              cursor: pointer;
+              .icon{
+                margin-left: 10px;
+                i{
+                  font-size: 20px;
+                }
+              }
+              .tool-menu{
+                position: absolute;
+                right: 0;
+                top: 60px;
+                color: #545c64;
+                z-index: 1;
+                background: #e5e5e5;
+                padding: 10px 25px;
+                border-radius: 5px;
+                .menu-item{
+                  height: 40px;
+                  line-height: 40px;
+                }
+                .menu-item:hover{
+                  color:#FF4040;
+                }
+              }
+            }
           }
         }
       }

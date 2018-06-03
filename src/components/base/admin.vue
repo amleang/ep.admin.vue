@@ -18,6 +18,7 @@
             <span>系统管理</span>
           </template>
           <el-menu-item-group>
+            <el-menu-item index="1-0">用户管理</el-menu-item>
             <el-menu-item index="1-1">菜单管理</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
@@ -28,10 +29,27 @@
         <div class="nav-top">
           <div class="change-menu">
             <i class="el-icon-menu" @click="isMenu=!isMenu"></i>
+            <div class="tool" @mousemove="isShowTool=true" @mouseout="isShowTool=false">
+              <span>管理员/admin</span>
+              <span class="icon">
+                <i class="iconfont icon-yonghutianchong"></i>
+              </span>
+              <div v-show="isShowTool" class="tool-menu" @mousemove="isShowTool=true" @mouseout="isShowTool=false">
+                <div class="menu-item">
+                  <i class="iconfont icon-personnone"></i>
+                  个人信息</div>
+                <div class="menu-item">
+                  <i class="iconfont icon-icon-test"></i>
+                  修改密码</div>
+                <div class="menu-item">
+                  <i class="iconfont icon-secede"></i>
+                  退出登录</div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="con" :style="`left:${!isMenu?'0px':'240px'}`">
-          <slot></slot>
+          <router-view/>
         </div>
       </div>
     </div>
@@ -43,18 +61,20 @@ export default {
   data() {
     return {
       isMenu: true,
+      isShowTool: false,
       activeMenu: "5"
     };
   },
   mounted() {
-    const that = this;
+    /*  const that = this;
     if (document.documentElement.clientWidth < 1000) this.isMenu = false;
     else this.isMenu = true;
     window.onresize = () => {
       if (parseInt(document.documentElement.clientWidth) < 1000)
         this.isMenu = false;
       else this.isMenu = true;
-    };
+    }; */
+    var path = this.$route.path;
   },
   methods: {
     menu_open_handle(key, keyPath) {},
@@ -63,7 +83,7 @@ export default {
       console.log(key, keyPath);
       this.activeMenu = key;
       if (keyPath.length == 1) this.$router.push({ path: "/" });
-      else this.$router.push({ path: "/sys/menu" });
+      else this.$router.push({ path: "/sys/user" });
     }
   }
 };

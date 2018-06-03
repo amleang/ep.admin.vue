@@ -1,10 +1,10 @@
 <template>
-    <base-admin>
+    <div>
         <base-search :isSpread="true" @spreadHandle="spreadHandle"></base-search>
         <base-table tableName="菜单管理" :columns="table.columns" :tableData="table.data">
             <!-- <div slot="button">zhagsan</div> -->
         </base-table>
-    </base-admin>
+    </div>
 </template>
 
 <script>
