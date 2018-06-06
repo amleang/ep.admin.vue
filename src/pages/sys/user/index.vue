@@ -1,16 +1,23 @@
 <template>
-    <div>
-        <base-search :isSpread="true" @spreadHandle="spreadHandle"></base-search>
-        <base-table tableName="用户管理" :columns="table.columns" :tableData="table.data">
-            <!-- <div slot="button">zhagsan</div> -->
-        </base-table>
-    </div>
+  <div>
+    <base-search :isSpread="true" @spreadHandle="spreadHandle"></base-search>
+    <base-table tableName="用户管理" :columns="table.columns" :tableData="table.data" :authority="authority"></base-table>
+    <el-dialog title="用户表单" :visible.sync="formDialog" top="20vh" width="700px" :modal-append-to-body="false" :close-on-click-modal="false">
+      <detail-form></detail-form>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
+import detailForm from "./form";
 export default {
+  components: {
+    detailForm
+  },
   data() {
     return {
+      authority: ["view", "add", "del"],
+      formDialog: true,
       table: {
         columns: [
           { prop: "name1", label: "名称1", width: 180 },
