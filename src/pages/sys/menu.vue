@@ -12,6 +12,7 @@ export default {
   data() {
     return {
       table: {
+        tableHeight:0,
         columns: [
           { prop: "name1", label: "名称", width: 180 },
           { prop: "name2", label: "名称2", width: 180 },
@@ -26,9 +27,13 @@ export default {
       }
     };
   },
+  mounted(){
+    this.table.tableHeight = this.wHeight()-300-112;
+  },
   methods: {
     spreadHandle(isOpen) {
-      console.log("isOpen=>", isOpen);
+     if (isOpen) this.table.tableHeight =  this.wHeight()-350-115;
+      else this.table.tableHeight = this.wHeight()-300-112;
     }
   }
 };

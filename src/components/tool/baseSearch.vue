@@ -4,7 +4,7 @@
             <span>查询</span>
             <div style="float: right;">
                 <el-button v-if="isSpread" size="small" class="btn-box-shadow" @click="spreadHandle">
-                    <i style="transform:rotate(90deg);" class="el-icon-d-arrow-right"></i>
+                    <i :style="`transform:rotate(${!isOpen?90:-90}deg);`" class="el-icon-d-arrow-right"></i>
                 </el-button>
                 <el-button type="primary" size="small" class="btn-box-shadow" icon="el-icon-search">查询</el-button>
             </div>

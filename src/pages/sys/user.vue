@@ -1,10 +1,9 @@
 <template>
-    <div>
-        <base-search :isSpread="true" @spreadHandle="spreadHandle"></base-search>
-        <base-table tableName="用户管理" :columns="table.columns" :tableData="table.data">
-            <!-- <div slot="button">zhagsan</div> -->
-        </base-table>
-    </div>
+  <div>
+    <base-search :isSpread="true" @spreadHandle="spreadHandle"></base-search>
+    <base-table tableName="用户管理" :columns="table.columns" :tableData="table.data" :tableHeight="table.tableHeight">
+    </base-table>
+  </div>
 </template>
 
 <script>
@@ -12,6 +11,7 @@ export default {
   data() {
     return {
       table: {
+        tableHeight: 500,
         columns: [
           { prop: "name1", label: "名称1", width: 180 },
           { prop: "name2", label: "名称2", width: 180 },
@@ -26,9 +26,13 @@ export default {
       }
     };
   },
+  mounted() {
+    this.table.tableHeight = this.wHeight() - 300 - 112;
+  },
   methods: {
     spreadHandle(isOpen) {
-      console.log("isOpen=>", isOpen);
+      if (isOpen) this.table.tableHeight = this.wHeight() - 350 - 115;
+      else this.table.tableHeight = this.wHeight() - 300 - 112;
     }
   }
 };

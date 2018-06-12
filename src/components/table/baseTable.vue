@@ -9,7 +9,7 @@
       </div>
 
     </div>
-    <el-table :data="tableData" style="width: 100%">
+    <el-table :data="tableData" :style=" `width: 100%;height:${tableHeight}px;`">
       <el-table-column v-for="(item,index) in columns" :key="index" :prop="item.prop" :label="item.label" :width="item.width"></el-table-column>
     </el-table>
     <el-pagination style="margin-top:20px;text-align:center;" :page-sizes="[10, 20, 30, 40,50]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="400">
@@ -23,6 +23,10 @@ export default {
     isShowTitle: {
       type: Boolean,
       default: true
+    },
+    tableHeight: {
+      type: Number,
+      default: 100
     },
     tableName: {
       type: String,

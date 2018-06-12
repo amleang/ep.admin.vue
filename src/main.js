@@ -33,6 +33,9 @@ import baseSearch from '@/components/tool/baseSearch'
 //自定义查询组件
 Vue.component('base-search', baseSearch)
 
+import util from '@/components/lib/util'
+Vue.use(util)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
