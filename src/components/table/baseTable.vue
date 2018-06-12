@@ -1,10 +1,10 @@
 <template>
-  <el-card class="box-card" style="min-width:700px;">
+  <el-card class="box-card table-form" style="min-width:700px;">
     <div v-if="isShowTitle" slot="header">
       <span>{{tableName}}</span>
       <div style="float: right;">
         <slot name="button">
-          <base-opear></base-opear>
+          <base-opear :authority="authority"></base-opear>
         </slot>
       </div>
 
@@ -20,6 +20,7 @@
 <script>
 export default {
   props: {
+    /**是否显示标题 */
     isShowTitle: {
       type: Boolean,
       default: true
@@ -32,15 +33,24 @@ export default {
       type: String,
       default: ""
     },
-    tableData: {
+    /**权限 */
+    authority: {
       type: Array,
-      default: () => {
+      default: function() {
         return [];
       }
     },
+    /**表单数据 */
+    tableData: {
+      type: Array,
+      default: function() {
+        return [];
+      }
+    },
+    /**数据列 */
     columns: {
       type: Array,
-      default: () => {
+      default: function() {
         return [];
       }
     }

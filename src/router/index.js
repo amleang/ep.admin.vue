@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/pages/login'
 import home from '@/pages/home'
-import user from "@/pages/sys/user"
+import user from "@/pages/sys/user/index"
 import menu from '@/pages/sys/menu'
 Vue.use(Router)
 

@@ -1,7 +1,7 @@
 <template>
-    <el-card class="box-card" :style="`min-width:700px;margin-bottom:20px;${isSpread&&!isOpen?'height:140px;':''}`">
+    <el-card class="box-card search-form" :style="`min-width:700px;margin-bottom:20px;${isSpread&&!isOpen?'height:120px;':''}`">
         <div slot="header" class="clearfix">
-            <span>查询</span>
+            <div style="float:left; height:32px;line-height:32px;">查询</div>
             <div style="float: right;">
                 <el-button v-if="isSpread" size="small" class="btn-box-shadow" @click="spreadHandle">
                     <i :style="`transform:rotate(${!isOpen?90:-90}deg);`" class="el-icon-d-arrow-right"></i>
