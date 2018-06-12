@@ -17,10 +17,8 @@
             <i class="el-icon-location"></i>
             <span>系统管理</span>
           </template>
-          <el-menu-item-group>
-            <el-menu-item index="1-0">用户管理</el-menu-item>
-            <el-menu-item index="1-1">菜单管理</el-menu-item>
-          </el-menu-item-group>
+          <el-menu-item index="1-0">用户管理</el-menu-item>
+          <el-menu-item index="1-1">菜单管理</el-menu-item>
         </el-submenu>
       </el-menu>
     </div>
