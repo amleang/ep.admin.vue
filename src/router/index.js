@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Login from '@/pages/login'
 import home from '@/pages/home'
 import user from "@/pages/sys/user/index"
-import menu from '@/pages/sys/menu'
+import menu from '@/pages/sys/menu/index'
 Vue.use(Router)
 
 export default new Router({

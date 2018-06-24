@@ -12,11 +12,11 @@
                             <input type="password" placeholder="请输入密码"  value="" class="pwd" >
                         </div>
                         <div>
-                            <div class="input" style="width:300px;float:left;margin-top:0;margin-right:20px;" >
+                            <div class="input" style="width:275px;float:left;margin-top:0;margin-right:20px;" >
                                 <input type="text" placeholder="请输入验证码" maxlength="10" value="" class="check" >
                             </div>
-                            <div style="float:left;height:45px;margin-left:-10px; width:90px;background:#ccc;" >
-                                <img style="height:40px;margin-top:2px;" >
+                            <div style="float:left;height:45px;margin-left:-10px; width:115px;background:#ccc;">
+                                <img style="height:40px;margin-top:2px;" :src="captcha" >
                             </div><div style="clear:both" ></div>
                         </div>
                         <div class="btn-login" @click="login_handle" >登录</div>
@@ -30,7 +30,12 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      captcha:"",
+    };
+  },
+  mounted(){
+    this.captcha="/api/captcha";
   },
   methods: {
     login_handle() {
