@@ -35,6 +35,8 @@ Vue.component('base-search', baseSearch)
 
 import util from '@/components/lib/util'
 Vue.use(util)
+import http from '@/components/api/http'
+Vue.use(http)
 
 /* eslint-disable no-new */
 new Vue({

@@ -98,6 +98,9 @@ export default {
         this.isMenu = false;
       else this.isMenu = true;
     }; */
+    this.http.get("/api/menu/index",{params:{type:0}}).then(res=>{
+      console.log("admin-menu=>",res)
+    })
     var path = this.$route.path;
   },
   methods: {
