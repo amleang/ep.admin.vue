@@ -1,47 +1,16 @@
 <template>
     <el-card class="box-card search-form" :style="`min-width:700px;margin-bottom:20px;${isSpread&&!isOpen?'height:120px;':''}`">
         <div slot="header" class="clearfix">
-            <div style="float:left; height:32px;line-height:32px;">查询</div>
+            <div style="float:left; height:32px;line-height:32px;">查询条件</div>
             <div style="float: right;">
                 <el-button v-if="isSpread" size="small" class="btn-box-shadow" @click="spreadHandle">
                     <i :style="`transform:rotate(${!isOpen?90:-90}deg);`" class="el-icon-d-arrow-right"></i>
                 </el-button>
-                <el-button type="primary" size="small" class="btn-box-shadow" icon="el-icon-search">查询</el-button>
+                <el-button type="primary" size="small" class="btn-box-shadow" icon="el-icon-search" @click="search_handle">查询</el-button>
             </div>
         </div>
         <div>
-            <el-row :gutter="20" style="padding-bottom:20px;">
-                <el-col :span="2">
-                    <div class="search-title">名称</div>
-                </el-col>
-                <el-col :span="6">
-                    <el-input style="display:inline-block;" size="small" placeholder="请输入内容">
-                    </el-input>
-                </el-col>
-                <el-col :span="2">
-                    <div class="search-title">状态</div>
-                </el-col>
-                <el-col :span="6">
-                    <el-input style="display:inline-block;" size="small" placeholder="请输入内容">
-                    </el-input>
-                </el-col>
-                <el-col :span="2">
-                    <div class="search-title">状态2</div>
-                </el-col>
-                <el-col :span="6">
-                    <el-input style="display:inline-block;" size="small" placeholder="请输入内容">
-                    </el-input>
-                </el-col>
-            </el-row>
-            <el-row :gutter="20">
-                <el-col :span="2">
-                    <div class="search-title">名称</div>
-                </el-col>
-                <el-col :span="6">
-                    <el-input style="display:inline-block;" size="small" placeholder="请输入内容">
-                    </el-input>
-                </el-col>
-            </el-row>
+            <slot></slot>
         </div>
     </el-card>
 </template>
@@ -63,6 +32,9 @@ export default {
     spreadHandle() {
       this.isOpen = !this.isOpen;
       this.$emit("spreadHandle", this.isOpen);
+    },
+    search_handle() {
+      this.$emit("searchHandle");
     }
   }
 };

@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
 export default {
   data() {
     return {
@@ -69,12 +70,14 @@ export default {
         });
         return;
       }
-      debugger
+      debugger;
       this.http.post("/api/login", this.form).then(res => {
+        debugger;
         if (res.code == 200) {
-          
+          let token = res.token;
+          Cookies.set("member", token);
           this.$router.push("/");
-        }
+        } else this.$message.error(res.msg);
       });
     }
   }

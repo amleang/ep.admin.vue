@@ -4,6 +4,7 @@ import Login from '@/pages/login'
 import home from '@/pages/home'
 import user from "@/pages/sys/user/index"
 import menu from '@/pages/sys/menu/index'
+import params from '@/pages/sys/params/index'
 Vue.use(Router)
 
 export default new Router({
@@ -19,6 +20,8 @@ export default new Router({
         },
         {
           path: '/sys/menu', component: menu
+        }, {
+          path: '/sys/para',component: params
         }
       ]
     }, {

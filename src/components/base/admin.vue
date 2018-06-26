@@ -6,7 +6,7 @@
         <div class="line"></div>
       </div>
       <el-menu :default-active="activeMenu" style="height:100%;" @open="menu_open_handle" @close="menu_close_handle" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" @select="handleSelect">
-       <!--  <el-menu-item index="5">
+        <!--  <el-menu-item index="5">
           <template slot="title">
             <i class="el-icon-location"></i>
             <span>主页</span>
@@ -25,15 +25,15 @@
           <el-menu-item v-if="item.subList==0" :index="`${item.id}`" :key="idx">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>{{item.name}}</span>
+              <span>{{item.mname}}</span>
             </template>
           </el-menu-item>
           <el-submenu v-else :index="`${item.id}`" :key="idx">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>{{item.name}}</span>
+              <span>{{item.mname}}</span>
             </template>
-            <el-menu-item v-for="(sub,x) in item.subList" :index="`${sub.id}`" :key="x">{{sub.name}}</el-menu-item>
+            <el-menu-item v-for="(sub,x) in item.subList" :index="`${sub.id}`" :key="x">{{sub.mname}}</el-menu-item>
           </el-submenu>
         </template>
 
@@ -76,17 +76,10 @@
 export default {
   data() {
     return {
-      menuList: [
-        { id: 0, name: "首页", subList: [] },
-        {
-          id: 1,
-          name: "系统管理",
-          subList: [{ id: 2, name: "用户管理" }, { id: 3, name: "菜单管理" }]
-        }
-      ],
+      menuList: [{ subList: [] }],
       isMenu: true,
       isShowTool: false,
-      activeMenu: "5"
+      activeMenu: "0"
     };
   },
   mounted() {
@@ -98,21 +91,39 @@ export default {
         this.isMenu = false;
       else this.isMenu = true;
     }; */
-    this.http.get("/api/menu/service").then(res=>{
-      console.log("admin-menu=>",res)
-    })
+    this.http.get("/api/menu/service").then(res => {
+      if (res.code == 200) {
+        var menuList = res.data.filter(x => x.pid == 0);
+        menuList.forEach(item => {
+          var subList = res.data.filter(x => x.pid == item.id);
+          item.subList = subList;
+        });
+        this.menuList = menuList;
+        this.activeMenu = menuList[0].id;
+        console.log("admin-menu=>", menuList);
+      }
+    });
     var path = this.$route.path;
   },
   methods: {
     menu_open_handle(key, keyPath) {},
     menu_close_handle(key, keyPath) {},
     handleSelect(key, keyPath) {
-      debugger;
+      if (keyPath.length == 1) {
+        var menu = this.menuList.find(x => x.id == key);
+        this.$router.push({ path: menu.murl });
+      } else {
+        var menu = this.menuList
+          .find(x => x.id == keyPath[0])
+          .subList.find(x => x.id == key);
+        this.$router.push({ path: menu.murl });
+      }
+      /*   debugger;
 
       console.log(key, keyPath);
       this.activeMenu = key;
       if (keyPath.length == 1) this.$router.push({ path: "/" });
-      else this.$router.push({ path: "/sys/user" });
+      else this.$router.push({ path: "/sys/user" }); */
     }
   }
 };
