@@ -1,45 +1,81 @@
 <template>
-    <div class="main">
-        <div class="login">
-            <div class="column sysTitle">System Title</div>
-            <div class="column">
-                <div class="login-form">
-                    <div class="form">
-                        <div class="input">
-                            <input type="text"  placeholder="请输入账号名" maxlength="20" value="" class="user">
-                        </div>
-                        <div class="input" >
-                            <input type="password" placeholder="请输入密码"  value="" class="pwd" >
-                        </div>
-                        <div>
-                            <div class="input" style="width:275px;float:left;margin-top:0;margin-right:20px;" >
-                                <input type="text" placeholder="请输入验证码" maxlength="10" value="" class="check" >
-                            </div>
-                            <div style="float:left;height:45px;margin-left:-10px; width:115px;background:#ccc;">
-                                <img style="height:40px;margin-top:2px;" :src="captcha" >
-                            </div><div style="clear:both" ></div>
-                        </div>
-                        <div class="btn-login" @click="login_handle" >登录</div>
-                    </div>
-                </div>
+  <div class="main">
+    <div class="login">
+      <div class="column sysTitle">System Title</div>
+      <div class="column">
+        <div class="login-form">
+          <div class="form">
+            <div class="input">
+              <input type="text" placeholder="请输入账号名" maxlength="20" v-model="form.account" class="user">
             </div>
+            <div class="input">
+              <input type="password" placeholder="请输入密码" v-model="form.pwd" class="pwd">
+            </div>
+            <div>
+              <div class="input" style="width:275px;float:left;margin-top:0;margin-right:20px;">
+                <input type="text" placeholder="请输入验证码" maxlength="10" v-model="form.captcha" class="check">
+              </div>
+              <div style="float:left;height:45px;margin-left:-10px; width:115px;background:#ccc;">
+                <img style="height:40px;margin-top:2px;cursor: pointer;" :src="captcha" @click="change_captcha">
+              </div>
+              <div style="clear:both"></div>
+            </div>
+            <div class="btn-login" @click="login_handle">登录</div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      captcha:"",
+      captcha: "",
+      form: {
+        account: "",
+        pwd: "",
+        captcha: ""
+      }
     };
   },
-  mounted(){
-    this.captcha="/api/captcha";
+  mounted() {
+    this.captcha = "/api/captcha";
   },
   methods: {
+    change_captcha() {
+      this.captcha = "/api/captcha?" + Math.round(Math.random() * 9999999999);
+    },
     login_handle() {
-      this.$router.push("/");
+      if (!this.form.account) {
+        this.$message({
+          message: "请输入登录名！",
+          type: "warning"
+        });
+        return;
+      }
+      if (!this.form.pwd) {
+        this.$message({
+          message: "请输入密码！",
+          type: "warning"
+        });
+        return;
+      }
+      if (!this.form.captcha) {
+        this.$message({
+          message: "请输入验证码！",
+          type: "warning"
+        });
+        return;
+      }
+      debugger
+      this.http.post("/api/login", this.form).then(res => {
+        if (res.code == 200) {
+          
+          this.$router.push("/");
+        }
+      });
     }
   }
 };

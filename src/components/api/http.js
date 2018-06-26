@@ -17,9 +17,22 @@ instanceAxios.interceptors.request.use(
 // Add a response interceptor
 instanceAxios.interceptors.response.use(
     res => {
-        let resData = res.data
-        return resData
-
+        let resData = res.data;
+        if (resData.code == 200) {
+            return resData
+        }
+        else {
+            if (resData.code == 1003) {
+                Message.error(resData.msg);
+                setTimeout(() => {
+                    location.href = "/login";
+                }, 2500);
+            }
+            else {
+                Message.error(resData.msg)
+            }
+            return resData;
+        }
     },
     err => {
         // 这里显示网络异常
