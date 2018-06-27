@@ -5,7 +5,7 @@
         后台管理系统
         <div class="line"></div>
       </div>
-      <el-menu :default-active="activeMenu" style="height:100%;" @open="menu_open_handle" @close="menu_close_handle" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" @select="handleSelect">
+      <el-menu :default-active="`${activeMenu}`" :unique-opened="true" style="height:100%;" @open="menu_open_handle" @close="menu_close_handle" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" @select="handleSelect">
         <!--  <el-menu-item index="5">
           <template slot="title">
             <i class="el-icon-location"></i>
@@ -22,18 +22,18 @@
         </el-submenu> -->
 
         <template v-for="(item,idx) in menuList">
-          <el-menu-item v-if="item.subList==0" :index="`${item.id}`" :key="idx">
+          <el-menu-item  v-if="item.subList==0" :index="`${item.id}`" :key="idx">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              <i class="iconfont icon-home"></i>
               <span>{{item.mname}}</span>
             </template>
           </el-menu-item>
-          <el-submenu v-else :index="`${item.id}`" :key="idx">
-            <template slot="title">
-              <i class="el-icon-location"></i>
+          <el-submenu  v-else :index="`${item.id}`" :key="idx">
+            <template  slot="title">
+              <i class="iconfont icon-setting"></i>
               <span>{{item.mname}}</span>
             </template>
-            <el-menu-item v-for="(sub,x) in item.subList" :index="`${sub.id}`" :key="x">{{sub.mname}}</el-menu-item>
+            <el-menu-item style="padding-left:70px;" v-for="(sub,x) in item.subList" :index="`${sub.id}`" :key="x">{{sub.mname}}</el-menu-item>
           </el-submenu>
         </template>
 
@@ -50,7 +50,7 @@
               <span class="icon">
                 <i class="iconfont icon-yonghutianchong"></i>
               </span>
-              <div v-show="isShowTool" class="tool-menu" @mousemove="isShowTool=true" @mouseout="isShowTool=false">
+              <div class="tool-menu">
                 <div class="menu-item">
                   <i class="iconfont icon-personnone"></i>
                   个人信息</div>
@@ -91,15 +91,18 @@ export default {
         this.isMenu = false;
       else this.isMenu = true;
     }; */
+    var path = this.$route.path;
     this.http.get("/api/menu/service").then(res => {
       if (res.code == 200) {
         var menuList = res.data.filter(x => x.pid == 0);
         menuList.forEach(item => {
+          if (item.murl == path) this.activeMenu = item.id;
           var subList = res.data.filter(x => x.pid == item.id);
           item.subList = subList;
+          var filters = subList.filter(x => x.murl == path);
+          if (filters.length > 0) this.activeMenu = filters[0].id;
         });
         this.menuList = menuList;
-        this.activeMenu = menuList[0].id;
         console.log("admin-menu=>", menuList);
       }
     });
@@ -133,4 +136,13 @@ export default {
 <style lang="scss" >
 @import "../css/base.scss";
 </style>
+<style lang="scss" scoped>
+.tool .tool-menu {
+  display: none;
+}
+.tool:hover .tool-menu {
+  display: block;
+}
+</style>
+
 

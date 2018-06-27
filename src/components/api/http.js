@@ -25,7 +25,7 @@ instanceAxios.interceptors.response.use(
             if (resData.code == 1003) {
                 Message.error(resData.msg);
                 setTimeout(() => {
-                    location.href = "/login";
+                    location.href = "#/login";
                 }, 2500);
             }
             else {
