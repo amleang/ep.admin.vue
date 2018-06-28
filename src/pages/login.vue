@@ -75,7 +75,7 @@ export default {
         debugger;
         if (res.code == 200) {
           let token = res.token;
-          Cookies.set("member", token);
+          Cookies.set("member", token,{ expires: 7 });
           this.$router.push("/");
         } else this.$message.error(res.msg);
       });
