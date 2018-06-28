@@ -9,10 +9,10 @@
       </div>
 
     </div>
-    <el-table :data="tableData" :style=" `width: 100%;height:${tableHeight}px;`" :highlight-current-row="highlight" @current-change="handleCurrentChange">
+    <el-table ref="table" :data="tableData" :style=" `width: 100%;height:${tableHeight}px;`" :highlight-current-row="highlight" @current-change="handleCurrentChange">
       <el-table-column v-for="(item,index) in columns" :key="index" :prop="item.prop" :label="item.label" :width="item.width"></el-table-column>
     </el-table>
-    <el-pagination style="margin-top:20px;text-align:center;" :page-sizes="[10, 20, 30, 40,50]" :page-size="10" :layout="paginationlayout" :total="total">
+    <el-pagination style="margin-top:20px;text-align:center;" :page-sizes="[10, 20, 30, 40,50]" :current-page="currPage" :page-size="pageSize" :layout="paginationlayout" :total="total">
     </el-pagination>
   </el-card>
 </template>
@@ -29,6 +29,10 @@ export default {
     isDefalutLoad: {
       type: Boolean,
       default: true
+    },
+    action: {
+      type: String,
+      default: ""
     },
     /**默认参数 */
     searchParams: {
@@ -53,19 +57,12 @@ export default {
       type: String,
       default: ""
     },
-    paginationlayout:{
-      type:String,
-      default:"total, sizes, prev, pager, next, jumper"
+    paginationlayout: {
+      type: String,
+      default: "total, sizes, prev, pager, next, jumper"
     },
     /**权限 */
     authority: {
-      type: Array,
-      default: function() {
-        return [];
-      }
-    },
-    /**表单数据 */
-    tableData: {
       type: Array,
       default: function() {
         return [];
@@ -82,8 +79,16 @@ export default {
   data() {
     return {
       currentRow: null,
-      total:20,
+      tableData: [],
+      currPage: 1,
+      pageSize: 10,
+      total: 20
     };
+  },
+  mounted() {
+    if (this.isDefalutLoad) {
+      if (this.action) this.reload();
+    }
   },
   methods: {
     /**行切换事件 */
@@ -95,6 +100,32 @@ export default {
       this.$emit("authorityhandle", {
         opear: item,
         currentRow: this.currentRow
+      });
+    },
+    reload() {
+      const loading = this.$loading({
+        lock: true,
+        text: "Loading",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)"
+      });
+      this.currPage = 1;
+      this.searchParams.page = this.currPage;
+      this.searchParams.size = this.pageSize;
+      this.http.get(this.action, { params: this.searchParams }).then(res => {
+        if (res.code == 200) {
+          this.total = res.count;
+          this.tableData = res.data;
+          if (res.count > 0) {
+            setTimeout(() => {
+              this.$refs['table'].setCurrentRow(this.tableData[0]);
+            }, 1);
+            
+          }
+        } else this.$message.error(res.msg);
+        setTimeout(() => {
+          loading.close();
+        }, 1000);
       });
     }
   }

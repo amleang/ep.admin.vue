@@ -30,20 +30,14 @@
     </base-search>
     <el-row :gutter="20">
       <el-col :span="12">
-        <base-table tableName="参数列表" :columns="table.columns" :searchParams="table.searchParams" paginationlayout="total,  prev, pager, next" :tableData="table.data" :minwidth="table.minwidth" :authority="authority" :tableHeight="table.tableHeight" @authorityhandle="authority_handle"></base-table>
+        <base-table action="/api/params/list" tableName="参数列表" :columns="table.columns" :searchParams="table.searchParams" paginationlayout="total,  prev, pager, next"  :minwidth="table.minwidth" :authority="authority" :tableHeight="table.tableHeight" @authorityhandle="authority_handle"></base-table>
       </el-col>
       <el-col :span="12">
-        <base-table tableName="参数明细列表" :columns="table.columns" :searchParams="table.searchParams1" paginationlayout="total,  prev, pager, next" :tableData="table.data" :minwidth="table.minwidth" :authority="authority" :tableHeight="table.tableHeight" @authorityhandle="subauthority_handle"></base-table>
+        <base-table tableName="参数明细列表" :columns="table.columns" :searchParams="table.searchParams1" paginationlayout="total,  prev, pager, next"  :minwidth="table.minwidth" :authority="authority" :tableHeight="table.tableHeight" @authorityhandle="subauthority_handle"></base-table>
       </el-col>
     </el-row>
-    <detail-form :visible="formDialog" :formType="formType" :readonly="formreadonly"></detail-form>
-    <el-dialog title="用户表单" :visible.sync="formDialog" top="20vh" width="600px" :modal-append-to-body="false" :close-on-click-modal="false">
-      
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>
+    <detail-form :formDialog="formDialog" :id="currid" :formType="formType" :readonly="formreadonly" @dialogvisible="dialog_visible_handle"></detail-form>
+
   </div>
 </template>
 
@@ -58,6 +52,7 @@ export default {
       authority: ["view", "add", "upd", "del"],
       options: [{ value: "1", label: "启用" }, { value: "0", label: "禁用" }],
       formDialog: false,
+      currid: 0,
       searchParams: { name: "", value: "", active: "" },
       formType: 0,
       formreadonly: false,
@@ -103,11 +98,11 @@ export default {
   },
   mounted() {
     this.table.tableHeight = this.wHeight() - 295 - 90;
-    this.http
+  /*   this.http
       .get("/api/params/list", { params: { page: 1, size: 10 } })
       .then(res => {
         console.log(`res=>`, res);
-      });
+      }); */
   },
   methods: {
     /**查询 */
@@ -118,6 +113,8 @@ export default {
       console.log("authority_handle=>", item);
       switch (item.opear) {
         case "add":
+          this.currid = 0;
+          this.formType = 0;
           this.formDialog = true;
           this.formreadonly = false;
           break;
@@ -125,6 +122,13 @@ export default {
     },
     subauthority_handle(item) {
       console.log("subauthority_handle=》", item);
+    },
+    dialog_visible_handle(val) {
+      console.log("val=>", val);
+
+      this.formDialog = val.dialog;
+      if (val.isreload) {
+      }
     }
   }
 };
