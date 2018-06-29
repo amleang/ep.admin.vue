@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="参数表单" :visible.sync="formDialog" top="20vh" width="600px" :modal-append-to-body="false" :close-on-click-modal="false" :before-close="handleClose">
-    <el-form ref="form" :rules="rules" :model="form" label-width="80px">
+    <el-form ref="form" class="form" :rules="rules" :model="form" label-width="80px">
       <el-form-item label="名称" prop="name">
         <el-input size="small" v-model="form.name" maxlength="50" style="width:350px;" placeholder="请输入名称"></el-input>
       </el-form-item>
@@ -70,7 +70,7 @@ export default {
         if (valid) {
           this.form.pid = this.formType;
           if (this.id == 0) {
-            this.http.post("/api/params", this.form).then(res => {
+            this.$http.post("/api/params", this.form).then(res => {
               if (res.code == 200) {
                 this.$message({
                   message: "添加成功",
@@ -79,9 +79,41 @@ export default {
                 this.$emit("dialogvisible", { dialog: false, isreload: true });
               } else this.$message.error(res.msg);
             });
+          } else {
+            this.$http.put("/api/params/" + this.id, this.form).then(res => {
+              console.log("update", res);
+              if (res.code == 200) {
+                this.$message({
+                  message: "修改成功",
+                  type: "success"
+                });
+                this.$emit("dialogvisible", { dialog: false, isreload: true });
+              } else this.$message.error(res.msg);
+            });
           }
         }
       });
+    }
+  },
+  watch: {
+    formDialog() {
+      if (this.formDialog) {
+        if (this.id != 0) {
+          this.$http.get("/api/params/" + this.id).then(res => {
+            console.log("item=>", res);
+            if (res.code == 200) {
+              this.form = {
+                name: res.docs.name,
+                value: res.docs.value,
+                active: res.docs.active,
+                weight: res.docs.weight,
+                remark: res.docs.remark
+              };
+            } else this.$message.error(res.msg);
+          });
+          console.log("update", this.id);
+        }
+      }
     }
   }
 };

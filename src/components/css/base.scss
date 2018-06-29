@@ -147,6 +147,9 @@
   .table-form .el-card__body{
     padding: 10px 20px;
   }
+  .form .el-input-number.is-controls-right .el-input__inner{
+    text-align: left;
+  }
 /*   .el-table--enable-row-hover .el-table__body tr:hover>td{
     color:#606266;
   }

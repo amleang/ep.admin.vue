@@ -37,6 +37,8 @@ import util from '@/components/lib/util'
 Vue.use(util)
 import http from '@/components/api/http'
 Vue.prototype.http = http;
+import $http from '@/components/api/$http'
+Vue.prototype.$http = $http;
 
 /* eslint-disable no-new */
 new Vue({

@@ -10,6 +10,8 @@
 
     </div>
     <el-table ref="table" :data="tableData" :style=" `width: 100%;height:${tableHeight}px;`" :highlight-current-row="highlight" @current-change="handleCurrentChange">
+<!--       <el-table-column type="index" >
+      </el-table-column> -->
       <el-table-column v-for="(item,index) in columns" :key="index" :prop="item.prop" :label="item.label" :width="item.width"></el-table-column>
     </el-table>
     <el-pagination style="margin-top:20px;text-align:center;" :page-sizes="[10, 20, 30, 40,50]" :current-page="currPage" :page-size="pageSize" :layout="paginationlayout" :total="total">
@@ -118,16 +120,16 @@ export default {
           this.tableData = res.data;
           if (res.count > 0) {
             setTimeout(() => {
-              this.$refs['table'].setCurrentRow(this.tableData[0]);
+              this.$refs["table"].setCurrentRow(this.tableData[0]);
+              this.$emit("loadrowhandle", this.tableData[0]);
             }, 1);
-            
           }
         } else this.$message.error(res.msg);
         setTimeout(() => {
           loading.close();
         }, 1000);
       });
-    }
+    },
   }
 };
 </script>

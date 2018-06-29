@@ -30,13 +30,13 @@
     </base-search>
     <el-row :gutter="20">
       <el-col :span="12">
-        <base-table action="/api/params/list" tableName="参数列表" :columns="table.columns" :searchParams="table.searchParams" paginationlayout="total,  prev, pager, next"  :minwidth="table.minwidth" :authority="authority" :tableHeight="table.tableHeight" @authorityhandle="authority_handle"></base-table>
+        <base-table ref="table" action="/api/params/list" tableName="参数列表" :columns="table.columns" :searchParams="table.searchParams" paginationlayout="total,  prev, pager, next" :minwidth="table.minwidth" :authority="authority" :tableHeight="table.tableHeight" @authorityhandle="authority_handle" @loadrowhandle="load_row_handle"></base-table>
       </el-col>
       <el-col :span="12">
-        <base-table tableName="参数明细列表" :columns="table.columns" :searchParams="table.searchParams1" paginationlayout="total,  prev, pager, next"  :minwidth="table.minwidth" :authority="authority" :tableHeight="table.tableHeight" @authorityhandle="subauthority_handle"></base-table>
+        <base-table ref="subTable" action="/api/params/list" tableName="参数明细列表" :isDefalutLoad="false" :columns="table.columns" :searchParams="subTable.searchParams" paginationlayout="total,  prev, pager, next" :minwidth="table.minwidth" :authority="authority" :tableHeight="table.tableHeight" @authorityhandle="subauthority_handle"></base-table>
       </el-col>
     </el-row>
-    <detail-form :formDialog="formDialog" :id="currid" :formType="formType" :readonly="formreadonly" @dialogvisible="dialog_visible_handle"></detail-form>
+    <detail-form :formDialog="formDialog" :id="currid" :formType="formType" :readonly="formreadonly" @dialogvisible="dialog_visible_handle" ></detail-form>
 
   </div>
 </template>
@@ -59,61 +59,43 @@ export default {
       table: {
         tableHeight: 0,
         minwidth: 500,
-        searchParams: { page: 1, size: 10 },
-        searchParams1: { page: 1, size: 10 },
+        currentRow: {},
+        searchParams: { page: 1, size: 10, pid: 0 },
         columns: [
           { prop: "id", label: "ID" },
           { prop: "name", label: "名称" },
           { prop: "value", label: "值" },
           { prop: "active", label: "状态" }
-        ],
-        data: [
-          {
-            id: "1",
-            name: "战三",
-            value: "dfadf",
-            active: "中的那等你of都是你发撒"
-          },
-          {
-            id: "1",
-            name: "战三",
-            value: "dfadf",
-            active: "中的那等你of都是你发撒"
-          },
-          {
-            id: "1",
-            name: "战三",
-            value: "dfadf",
-            active: "中的那等你of都是你发撒"
-          },
-          {
-            id: "1",
-            name: "战三",
-            value: "dfadf",
-            active: "中的那等你of都是你发撒"
-          }
         ]
+      },
+      subTable: {
+        currentRow: {},
+        searchParams: { page: 1, size: 10 },
+        subTable: []
       }
     };
   },
   mounted() {
     this.table.tableHeight = this.wHeight() - 295 - 90;
-  /*   this.http
-      .get("/api/params/list", { params: { page: 1, size: 10 } })
-      .then(res => {
-        console.log(`res=>`, res);
-      }); */
   },
   methods: {
     /**查询 */
     search_handle() {
       console.log("search");
     },
+    /**主table 操作按钮点击 */
     authority_handle(item) {
+      this.table.currentRow = item.currentRow;
       console.log("authority_handle=>", item);
       switch (item.opear) {
         case "add":
           this.currid = 0;
+          this.formType = 0;
+          this.formDialog = true;
+          this.formreadonly = false;
+          break;
+        case "upd":
+          this.currid = item.currentRow.id;
           this.formType = 0;
           this.formDialog = true;
           this.formreadonly = false;
@@ -123,11 +105,20 @@ export default {
     subauthority_handle(item) {
       console.log("subauthority_handle=》", item);
     },
+    /**加载选中行 */
+    load_row_handle(currRow) {
+      console.log("currRow=>", currRow);
+      this.subTable.searchParams.page = 1;
+      this.subTable.searchParams.pid = currRow.id;
+      this.$refs.subTable.reload();
+    },
+    /**表单操作返回 */
     dialog_visible_handle(val) {
       console.log("val=>", val);
-
       this.formDialog = val.dialog;
       if (val.isreload) {
+        this.table.searchParams.page = 1;
+        this.$refs.table.reload();
       }
     }
   }
