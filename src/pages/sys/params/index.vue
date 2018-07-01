@@ -20,7 +20,7 @@
           <div class="search-title">状态</div>
         </el-col>
         <el-col :span="6">
-          <el-select style="display:inline-block;" v-model="searchParams.active" size="small" placeholder="请选择">
+          <el-select style="display:inline-block;" v-model="searchParams.active" size="small" clearable placeholder="请选择">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
@@ -30,13 +30,13 @@
     </base-search>
     <el-row :gutter="20">
       <el-col :span="12">
-        <base-table ref="table" action="/api/params/list" tableName="参数列表" :columns="table.columns" :searchParams="table.searchParams" paginationlayout="total,  prev, pager, next" :minwidth="table.minwidth" :authority="authority" :tableHeight="table.tableHeight" @authorityhandle="authority_handle" @loadrowhandle="load_row_handle"></base-table>
+        <base-table ref="table" action="/api/params/list" tableName="参数列表" :columns="table.columns" :searchParams="table.searchParams" paginationlayout="total,  prev, pager, next" :minwidth="table.minwidth" :authority="authority" :tableHeight="table.tableHeight" @authorityhandle="authority_handle" @loadrowhandle="load_row_handle" @handleCurrentChange="rowchange_handle"></base-table>
       </el-col>
       <el-col :span="12">
         <base-table ref="subTable" action="/api/params/list" tableName="参数明细列表" :isDefalutLoad="false" :columns="table.columns" :searchParams="subTable.searchParams" paginationlayout="total,  prev, pager, next" :minwidth="table.minwidth" :authority="authority" :tableHeight="table.tableHeight" @authorityhandle="subauthority_handle"></base-table>
       </el-col>
     </el-row>
-    <detail-form :formDialog="formDialog" :id="currid" :formType="formType" :readonly="formreadonly" @dialogvisible="dialog_visible_handle" ></detail-form>
+    <detail-form :formDialog="formDialog" :id="currid" :formType="formType" :readonly="formreadonly" @dialogvisible="dialog_visible_handle"></detail-form>
 
   </div>
 </template>
@@ -49,7 +49,7 @@ export default {
   },
   data() {
     return {
-      authority: ["view", "add", "upd", "del"],
+      authority: ["add", "upd", "del"],
       options: [{ value: "1", label: "启用" }, { value: "0", label: "禁用" }],
       formDialog: false,
       currid: 0,
@@ -81,7 +81,26 @@ export default {
   methods: {
     /**查询 */
     search_handle() {
+      debugger;
+      this.table.searchParams = this.searchParams;
+      this.table.searchParams.page = 1;
+      this.table.searchParams.pid = 0;
+      this.table.searchParams.size = 10;
+      this.$refs.table.reload();
       console.log("search");
+    },
+    rowchange_handle(row) {
+      if (row) {
+        this.table.currentRow = row;
+        this.subTable.searchParams.pid = row.id;
+        this.subTable.searchParams.page = 1;
+        this.$refs.subTable.reload();
+      } else {
+        this.table.currentRow = row;
+        this.subTable.searchParams.pid = -1;
+        this.subTable.searchParams.page = 1;
+        this.$refs.subTable.reload();
+      }
     },
     /**主table 操作按钮点击 */
     authority_handle(item) {
@@ -95,15 +114,95 @@ export default {
           this.formreadonly = false;
           break;
         case "upd":
-          this.currid = item.currentRow.id;
-          this.formType = 0;
-          this.formDialog = true;
-          this.formreadonly = false;
+          if (item.currentRow) {
+            this.currid = item.currentRow.id;
+            this.formType = 0;
+            this.formDialog = true;
+            this.formreadonly = false;
+          } else {
+            this.$message.warning("当前没有参数可编辑！");
+          }
+          break;
+        case "del":
+          if (item.currentRow) {
+            this.table_delete_handle(item.currentRow.id);
+          } else {
+            this.$message.warning("当前没有参数可删除！");
+          }
           break;
       }
     },
     subauthority_handle(item) {
-      console.log("subauthority_handle=》", item);
+      this.subTable.currentRow = item.currentRow;
+      console.log("authority_handle=>", item);
+      switch (item.opear) {
+        case "add":
+          this.currid = 0;
+          this.formType = this.table.currentRow.id;
+          this.formDialog = true;
+          this.formreadonly = false;
+          break;
+        case "upd":
+          if (item.currentRow) {
+            this.currid = item.currentRow.id;
+            this.formType = this.table.currentRow.id;
+            this.formDialog = true;
+            this.formreadonly = false;
+          } else {
+            this.$message.warning("当前没有参数明细可编辑！");
+          }
+          break;
+        case "del":
+          if (item.currentRow) {
+            this.sub_table_del_handle(item.currentRow.id);
+          } else this.$message.warning("当前没有参数明细可删除！");
+          break;
+      }
+    },
+    /**主数据删除 */
+    table_delete_handle(id) {
+      this.$confirm("确定要删除该参数及明细信息吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$http
+            .delete("/api/params/" + id, { params: { pid: 0 } })
+            .then(res => {
+              if (res.code == 200) {
+                this.$message({
+                  message: "删除成功",
+                  type: "success"
+                });
+                this.table.searchParams.page = 1;
+                this.$refs.table.reload();
+              } else this.$message.eror(res.msg);
+            });
+        })
+        .catch(() => {});
+    },
+    sub_table_del_handle(id) {
+      this.$confirm("确定要删除该参数及明细信息吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$http
+            .delete("/api/params/" + id, { params: { pid: 1 } })
+            .then(res => {
+              if (res.code == 200) {
+                this.$message({
+                  message: "删除成功",
+                  type: "success"
+                });
+                this.subTable.searchParams.page = 1;
+                this.$refs.subTable.reload();
+              } else this.$message.eror(res.msg);
+            });
+        })
+        .catch(() => {});
     },
     /**加载选中行 */
     load_row_handle(currRow) {
@@ -117,8 +216,13 @@ export default {
       console.log("val=>", val);
       this.formDialog = val.dialog;
       if (val.isreload) {
-        this.table.searchParams.page = 1;
-        this.$refs.table.reload();
+        if (this.formType == 0) {
+          this.table.searchParams.page = 1;
+          this.$refs.table.reload();
+        } else {
+          this.subTable.searchParams.page = 1;
+          this.$refs.subTable.reload();
+        }
       }
     }
   }

@@ -1,10 +1,8 @@
 <template>
   <div>
     <base-search :isSpread="true" @spreadHandle="spreadHandle"></base-search>
-    <base-table tableName="用户管理" :columns="table.columns" :tableData="table.data" :authority="authority" :tableHeight="table.tableHeight"></base-table>
-    <el-dialog title="用户表单" :visible.sync="formDialog" top="20vh" width="700px" :modal-append-to-body="false" :close-on-click-modal="false">
-      <detail-form></detail-form>
-    </el-dialog>
+    <base-table tableName="用户管理" action="/api/user/list" :columns="table.columns" :authority="authority" :tableHeight="table.tableHeight"></base-table>
+    <detail-form :formDialog="formDialog"></detail-form>
   </div>
 </template>
 
@@ -16,20 +14,17 @@ export default {
   },
   data() {
     return {
-      authority: ["view", "add", "del"],
+      authority: ["add", "upd", "del"],
       formDialog: true,
       table: {
         tableHeight: 0,
         columns: [
-          { prop: "name1", label: "名称1", width: 180 },
-          { prop: "name2", label: "名称2", width: 180 },
-          { prop: "name3", label: "备注" }
-        ],
-        data: [
-          { name1: "战三", name2: "dfadf", name3: "中的那等你of都是你发撒" },
-          { name1: "战三", name2: "dfadf", name3: "中的那等你of都是你发撒" },
-          { name1: "战三", name2: "dfadf", name3: "中的那等你of都是你发撒" },
-          { name1: "战三", name2: "dfadf", name3: "中的那等你of都是你发撒" }
+          { prop: "id", label: "ID", width: 180 },
+          { prop: "account", label: "登录名" },
+          { prop: "relName", label: "真实姓名" },
+          { prop: "active", label: "状态" },
+          { prop: "weight", label: "排序" },
+          { prop: "createTime", label: "创建时间" }
         ]
       }
     };

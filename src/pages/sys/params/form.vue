@@ -50,7 +50,13 @@ export default {
   data() {
     return {
       visible: true,
-      form: {},
+      form: {
+        name: "",
+        value: "",
+        actove: "",
+        weight: "",
+        remark: ""
+      },
       rules: {
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
         value: [{ required: true, message: "请输入值", trigger: "blur" }],
@@ -68,6 +74,7 @@ export default {
     handleOk() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          debugger;
           this.form.pid = this.formType;
           if (this.id == 0) {
             this.$http.post("/api/params", this.form).then(res => {
@@ -98,6 +105,13 @@ export default {
   watch: {
     formDialog() {
       if (this.formDialog) {
+        this.form = {
+          name: "",
+          value: "",
+          actove: "",
+          weight: "",
+          remark: ""
+        };
         if (this.id != 0) {
           this.$http.get("/api/params/" + this.id).then(res => {
             console.log("item=>", res);

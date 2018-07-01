@@ -10,9 +10,11 @@
 
     </div>
     <el-table ref="table" :data="tableData" :style=" `width: 100%;height:${tableHeight}px;`" :highlight-current-row="highlight" @current-change="handleCurrentChange">
-<!--       <el-table-column type="index" >
+      <!--       <el-table-column type="index" >
       </el-table-column> -->
-      <el-table-column v-for="(item,index) in columns" :key="index" :prop="item.prop" :label="item.label" :width="item.width"></el-table-column>
+      <el-table-column v-for="(item,index) in columns" :key="index" :prop="item.prop" :label="item.label" :width="item.width">
+       
+      </el-table-column>
     </el-table>
     <el-pagination style="margin-top:20px;text-align:center;" :page-sizes="[10, 20, 30, 40,50]" :current-page="currPage" :page-size="pageSize" :layout="paginationlayout" :total="total">
     </el-pagination>
@@ -96,6 +98,7 @@ export default {
     /**行切换事件 */
     handleCurrentChange(val) {
       this.currentRow = val;
+      this.$emit("handleCurrentChange", val);
     },
     /**操作点击事件 */
     authority_handle(item) {
@@ -129,7 +132,7 @@ export default {
           loading.close();
         }, 1000);
       });
-    },
+    }
   }
 };
 </script>
